@@ -15,4 +15,4 @@
   <li>RestAssured: HttpRequest/Response classes used for making HTTP requests and validating responses.</li>
 </ul>
 
-<img src="SS.png" width="800" />
+<img src="SS.png" width="1200" />
