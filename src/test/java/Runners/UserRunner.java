@@ -6,9 +6,9 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = "src/test/java/User/AddUser.feature",
+        features = "src/test/java/User/User.feature",
         glue = "StepDefinitions",
-        tags = "@USERs"
+        tags = "@USER"
 )
 public class UserRunner {
 

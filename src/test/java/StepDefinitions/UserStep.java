@@ -10,12 +10,25 @@ import io.cucumber.java.en.When;
 import org.json.JSONObject;
 import org.junit.Assert;
 
-public class UserStepImplementation {
+public class UserStep {
 
     UserApi userApi = new UserApi();
     Response response;
     JSONObject body;
     User user;
+
+    @When("Generate token the user who has {string} username and {string} password")
+    public void generateToken (String arg0, String arg1) throws Exception {
+        response = userApi.generateToken(arg0, arg1);
+    }
+
+    @Then("Get the user who has {string} userid , {string} username and {string} password")
+    public void getUser (String arg0 , String arg1, String arg2) throws Exception {
+        JSONObject jsonObject = new JSONObject(response.getBody());
+        response = userApi.getUser(new User(arg0, arg1, arg2, true),jsonObject.getString("token"));
+        Assert.assertEquals("The user : " , 200 , response.getStatusCode());
+        System.out.println(response.getBody());
+    }
 
     @When("The user who has {string} email and {string} password will be added")
     public void addUser(String arg0, String arg1) throws Exception {

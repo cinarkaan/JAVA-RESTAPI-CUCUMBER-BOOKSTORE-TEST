@@ -12,15 +12,16 @@ import java.net.http.HttpResponse;
 public class BookApi extends Book implements HttpMethods {
 
     @Override
-    public void get() throws Exception{
+    public Response get() throws Exception{
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://bookstore.toolsqa.com/BookStore/v1/Books"))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("response body: " + response.body());
+        //System.out.println("response body: " + response.body());
 
+        return new Response(response.statusCode(), response.body());
     }
 
     @Override
@@ -40,7 +41,7 @@ public class BookApi extends Book implements HttpMethods {
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .uri(URI.create("https://bookstore.toolsqa.com/BookStore/v1/Books"))
-                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer" + args[2])
                 .build();
 
         HttpResponse<String> response = HttpClient.newHttpClient()
@@ -56,7 +57,23 @@ public class BookApi extends Book implements HttpMethods {
     }
 
     @Override
-    public void delete() {
+    public Response delete(String... args) throws Exception{
 
+        String requestBody = "{\n" +
+                "  \"isbn\": \"" + args[0] +
+                "\",\n" +
+                "  \"userId\": \"" + args[1] +
+                "\"\n" +
+                "}";
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody)).DELETE()
+                .uri(URI.create("https://bookstore.toolsqa.com/BookStore/v1/Book"))
+                .build();
+
+        HttpResponse<String> response = HttpClient.newHttpClient()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+
+        return new Response(response.statusCode(), response.body());
     }
 }
